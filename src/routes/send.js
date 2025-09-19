@@ -1,5 +1,6 @@
 const express = require("express");
-const { getClient, isReady, checkApiKey } = require("../whatsapp");
+const { getClient, isReady } = require("../whatsapp");
+const checkApiKey = require("../middlewares/auth");
 
 const router = express.Router();
 

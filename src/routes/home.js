@@ -13,6 +13,8 @@ router.get("/", async (req, res) => {
       <h2>Scan QR WhatsApp</h2>
       <div id="qr-container">Loading QR...</div>
       <p id="status">Menunggu koneksi...</p>
+      <p id="name"></p>
+      <p id="number"></p>
       <button id="logout" style="margin-top:20px; padding:10px;">Logout</button>
 
       <script>
@@ -30,14 +32,22 @@ router.get("/", async (req, res) => {
           try {
             let res = await fetch("/status");
             let data = await res.json();
+
             document.getElementById("status").innerText = "Status: " + data.status;
+
+            if (data.user) {
+              document.getElementById("name").innerText = "Nama: " + data.user?.name;
+              document.getElementById("number").innerText = "Nomor: " + data.user?.number;
+            }
+
             if (data.status === "disconnected") {
               fetchQR();
             } else {
               document.getElementById("qr-container").innerHTML = "<b> Sudah login!</b>";
             }
           } catch (err) {
-            document.getElementById("status").innerText = "Error cek status";
+            console.error(err)
+            document.getElementById("status").innerText = "Error cek console";
           }
         }
 

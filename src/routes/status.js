@@ -1,11 +1,20 @@
 const express = require("express");
-const { isReady } = require("../whatsapp");
+const { isReady, getUserInfo } = require("../whatsapp");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  const state = isReady() ? "authenticated" : "disconnected";
-  res.json({ status: state });
+  if (isReady()) {
+    res.json({
+      status: "autheticated",
+      user: getUserInfo(),
+    });
+  } else {
+    res.json({
+      status: "disconnected",
+      user: null,
+    });
+  }
 });
 
 module.exports = router;
