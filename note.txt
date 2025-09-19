@@ -1,0 +1,1 @@
+Kalau mau di deploy di iis, gunakan npm dan bukan bun karena handler resminya di iis belum ada yang memakai bun
