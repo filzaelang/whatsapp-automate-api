@@ -1,19 +1,18 @@
 const express = require("express");
-const { getClient, isReady } = require("../whatsapp");
+const { getClient, isReady, checkApiKey } = require("../whatsapp");
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", checkApiKey, async (req, res) => {
   const client = getClient();
-
-  if (!isReady()) {
-    return res.status(400).json({ error: "Whatsapp belum siap" });
-  }
-
   const { number, message } = req.body;
 
   if (!number || !message) {
     return res.status(400).json({ error: "number dan message wajib diisi" });
+  }
+
+  if (!isReady()) {
+    return res.status(400).json({ error: "Whatsapp belum siap" });
   }
 
   try {

@@ -42,9 +42,18 @@ async function resetClient() {
   client = createClient();
 }
 
+function checkApiKey(req, res, next) {
+  const apiKey = req.header("x-api-key");
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return res.status(403).json({ error: "Invalid or missing API key" });
+  }
+  next();
+}
+
 module.exports = {
   getClient: () => client,
   getQr: () => qrCodeData,
   isReady: () => isReady,
   resetClient,
+  checkApiKey,
 };
