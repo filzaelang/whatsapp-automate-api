@@ -1,9 +1,11 @@
 const express = require("express");
-const { client, isReady } = require("../whatsapp");
+const { getClient, isReady } = require("../whatsapp");
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  const client = getClient();
+
   if (!isReady()) {
     return res.status(400).json({ error: "Whatsapp belum siap" });
   }

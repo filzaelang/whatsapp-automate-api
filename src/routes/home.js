@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
             if (data.status === "disconnected") {
               fetchQR();
             } else {
-              document.getElementById("qr-container").innerHTML = "<b>✅ Sudah login!</b>";
+              document.getElementById("qr-container").innerHTML = "<b> Sudah login!</b>";
             }
           } catch (err) {
             document.getElementById("status").innerText = "Error cek status";

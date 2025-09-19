@@ -3,26 +3,48 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 let qrCodeData = null;
 let isReady = false;
 
-const client = new Client({
-  authStrategy: new LocalAuth(),
-});
+let client = createClient();
 
-client.on("qr", (qr) => {
-  qrCodeData = qr;
-  isReady = false;
-  console.log("QR Code received, scan with Whatsapp!");
-});
+function createClient() {
+  const c = new Client({
+    authStrategy: new LocalAuth(),
+  });
 
-client.on("ready", () => {
-  isReady = true;
-  qrCodeData = null;
-  console.log("Whatsapp is ready!");
-});
+  c.on("qr", (qr) => {
+    qrCodeData = qr;
+    isReady = false;
+    console.log("QR Code received, scan with Whatsapp!");
+  });
 
-client.initialize();
+  c.on("ready", () => {
+    isReady = true;
+    qrCodeData = null;
+    console.log("Whatsapp is ready!");
+  });
+
+  c.on("disconnected", () => {
+    isReady = false;
+    console.log("Whatsapp disconnected");
+  });
+
+  c.initialize();
+  return c;
+}
+
+async function resetClient() {
+  if (client) {
+    try {
+      await client.destroy();
+    } catch (err) {
+      console.log("Error destroying client:", err.message);
+    }
+  }
+  client = createClient();
+}
 
 module.exports = {
-  client,
+  getClient: () => client,
   getQr: () => qrCodeData,
   isReady: () => isReady,
+  resetClient,
 };
