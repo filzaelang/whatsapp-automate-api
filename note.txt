@@ -1,1 +1,28 @@
 Kalau mau di deploy di iis, gunakan npm dan bukan bun karena handler resminya di iis belum ada yang memakai bun
+
+Format send ke api =
+
+1. Di headers add "x-api-key"
+2. isi bodynya json dengan isi number dan message, misalnya seperti berikut
+{
+    "number": "11234...",
+    "message": "Selamat Page"
+}
+3. Alamat url api send nya = "/send"
+
+Jika menggunakan requests di python maka contohnya seperti berikut:
+message = "Selamat Sore!"
+
+url = data["wa_send_url"]
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "x-api-key": data["wa_api_key"]
+}
+data = {
+    "number": phone,
+    "message": message,
+}
+
+response = requests.post(url, json=data, headers=headers)
+response_dict = json.loads(response.text)
